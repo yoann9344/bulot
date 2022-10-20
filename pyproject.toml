@@ -29,6 +29,7 @@ dynamic = ["version"]
 [project.optional-dependencies]
 lint = ["flake8"]
 typecheck = ["mypy"]
+fixer = ["black"]
 
 [project.urls]
 Documentation = "https://github.com/yoann9344/bulot#readme"
@@ -48,6 +49,7 @@ cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=bulot 
 no-cov = "cov --no-cov"
 lint = "flake8"
 typecheck = "mypy --install-types bulot"
+fixer = "black ."
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
