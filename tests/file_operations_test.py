@@ -1,4 +1,3 @@
-import subprocess as sp
 from io import StringIO, BytesIO
 from pathlib import Path
 from unittest.mock import Mock

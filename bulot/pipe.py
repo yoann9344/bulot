@@ -22,6 +22,8 @@ class Pipe:
 
     def __or__(self, cmd: PipeCmd) -> "Pipe":
         stdin = self.stdout
+        stdout: Any
+
         if isinstance(cmd, XArgsMeta):
             stdout = cmd(stdin=stdin)
         elif isinstance(stdin, XArgs):

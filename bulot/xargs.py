@@ -27,7 +27,7 @@ class XArgs(metaclass=XArgsMeta):
     def __str__(self) -> str:
         return str(self.stdin)
 
-    def __call__(self, stdin) -> str:
+    def __call__(self, stdin) -> XArgs:
         self.stdin = stdin
         return self
 
@@ -58,10 +58,10 @@ class XArgs(metaclass=XArgsMeta):
         it = self.iter_stdin()
 
         execute = self.execute
-        if execute is not_set:
+        if isinstance(execute, NotSet):
             stdout = [shell.run_pipe(cmd, input=stdin) for stdin in it]
         else:
-            if isinstance(self.execute, str):
+            if isinstance(execute, str):
                 execute = execute.format
                 stdout = [shell.run_pipe(execute(stdin)) for stdin in it]
             else:

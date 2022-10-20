@@ -1,19 +1,18 @@
 from __future__ import annotations
 
-import re
 import shlex
 import subprocess as sp
 import time
-from collections.abc import Callable
+from typing import Callable
 from dataclasses import dataclass, asdict, field as data_field
 from pathlib import Path
 from typing import Any
 
-from . import PY
 from .aliases import Aliases
 from .command import Command
 from .logger import log
 from .pipe import Pipe
+from ._py_version import PY
 from ._types import RunPipeCmd
 
 
@@ -30,17 +29,17 @@ class RunConfig:
     stdin: int | None
     stdout: int | None
     stderr: int | None
-    preexec_fn: callable | None
+    preexec_fn: Callable | None
     close_fds: bool
     shell: bool  # to expand before runing (eg **/*.py, $HOME, ...)
-    cwd: None  # use it to change directory
-    env: None
+    cwd: str | None  # use it to change directory
+    env: dict | None
     universal_newlines: None
     startupinfo: None
-    creationflags: 0
-    restore_signals: True
-    start_new_session: False
-    pass_fds: ()
+    creationflags: int
+    restore_signals: bool
+    start_new_session: bool
+    pass_fds: tuple
     encoding: None
     errors: None
     text: None
@@ -95,20 +94,22 @@ class Shell:
     def cwd(self) -> Path:
         return self._cwd
 
+    @staticmethod
+    def _get_logger(silent: bool):
+        return log.debug if silent else log.info
+
     def run(
         self, cmd: str, *args, fake=False, callback=do_nothing, silent=False, **kwargs
     ) -> Command:
+        log_silent = self._get_logger(silent)
         command = Command(cmd, self._cwd, time.time(), -1.0, -1, None)
         self.historic.append(command)
-        if silent:
-            log.blabber(f"❯ {cmd}")
-        else:
-            log.info(f"❯ {cmd}")
+        log_silent(f"❯ {cmd}")
 
         if self.fake or fake:
             command.return_code = 0
             command.end = command.start
-            return
+            return command
 
         if PY >= "3.9":
             config = asdict(self.config) | kwargs
@@ -123,7 +124,7 @@ class Shell:
 
         try:
             completed_process: sp.CompletedProcess = sp.run(cmd_args, **config)
-            result = completed_process
+            result: sp.CalledProcessError | sp.CompletedProcess = completed_process
         except sp.CalledProcessError as exc:
             result = exc
             raise exc
@@ -132,12 +133,8 @@ class Shell:
             command.result = result
             command.end = time.time()
 
-            if silent:
-                log.blabber(command.stdout, end="")
-            else:
-                log.info(command.stdout, end="")
-
-            log.error(command.stderr, end="")
+            log_silent(command.stdout)
+            log.error(command.stderr)
             callback(command=command)
         return command
 
@@ -158,7 +155,7 @@ class Shell:
             stdout = self.run(
                 cmd, silent=self.silent_piping, check=True, **kwargs
             ).stdout
-        elif isinstance(cmd, Callable):
+        elif callable(cmd):
             stdin = kwargs.get("input")
             if stdin is not None:
                 stdout = cmd(stdin)
