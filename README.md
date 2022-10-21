@@ -120,9 +120,11 @@ if checkout.return_code == 128:
     git | f"checkout {BRANCH_NAME}"
 
 # Modify
-git.fake = True
+sh.fake = True
 FILE = "bulot/__init__.py"
 sh << "\nraise RuntimeError('Oups')" >> FILE
+sh.fake = False
+git.fake = True
 git | f"add {FILE}"
 git | "commit -m 'Add error'"
 git.fake = False

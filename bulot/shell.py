@@ -164,7 +164,7 @@ class Shell:
         if isinstance(cmd, str):
             if isinstance(kwargs.get("input"), str):
                 kwargs["input"] = kwargs["input"].encode("utf-8")
-            return self.run(cmd, silent=self.silent_piping, check=True, **kwargs)
+            return self.run(cmd, silent=self.silent_piping, check=False, **kwargs)
         elif callable(cmd):
             stdin = kwargs.get("input")
             return cmd() if stdin is None else cmd(stdin)
