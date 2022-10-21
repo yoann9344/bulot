@@ -25,11 +25,12 @@ pip install bulot
 ```
 
 ## Introduction
-Shells like Bash or Zsh are powerfull and essential languages. But once, you need to create
-huge script it quickly become [unmaintainable](https://github.com/ninjaaron/replacing-bash-scripting-with-python#warning-signs).
-The best to create a complexe is so to use a more advanced language like Python, Perl, ...
+Shells like Bash or Zsh are powerful and essential languages. But once, you need to create
+huge script it quickly becomes [unmaintainable](https://github.com/ninjaaron/replacing-bash-scripting-with-python#warning-signs).
+The best to create a complex script is so to use a more ergonomic language like Python, Perl, ...
 
-This library is still in early development, and might change.
+This library is still in early development stages, and might change. It requires feedbacks, so don't hesitate to open an
+issue !
 
 
 ## Examples
@@ -172,8 +173,8 @@ hatch run typecheck
 # Fixer
 hatch run fixer
 # Tests
-hatch run +py=310 test:pytest  # Only for python 3.10
-hatch run test:pytest  # Test all supported versions
+hatch run test:pytest
+hatch run +py=310 test:pytest
 # Coverage
 hatch run cov
 ```
