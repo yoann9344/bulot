@@ -23,7 +23,7 @@ class TestCommand:
         assert isinstance(result, sp.CompletedProcess)
         assert result.args == ["echo", "Plop"]
         assert result.returncode == 0
-        assert result.stdout == ECHO_STDOUT.encode("utf-8")
+        assert result.stdout == f"{ECHO_STDOUT}\n".encode("utf-8")
         assert result.stderr == "".encode("utf-8")
 
     @pytest.mark.usefixtures("file_mocker")

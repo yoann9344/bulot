@@ -4,7 +4,7 @@ from pathlib import Path
 ECHO_STR = "Plop"
 ECHO_CMD = f"echo '{ECHO_STR}'"
 ECHO_ARGS = ["echo", ECHO_STR]
-ECHO_STDOUT = f"{ECHO_STR}\n"
+ECHO_STDOUT = f"{ECHO_STR}"
 
 WRONG_FILE = "a_file_that_does_not_exist"
 WRONG_CMD = f"ls {WRONG_FILE}"

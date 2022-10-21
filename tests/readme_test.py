@@ -31,7 +31,7 @@ class TestReadmeCodeBlocks:
     blocks_python = extract_codes()
 
     def test_python(self):
-        assert len(self.blocks_python) == 2
+        assert len(self.blocks_python) == 4
         for block in self.blocks_python:
             sh = Shell()
             sh.cd(Path(__file__).parent.parent)

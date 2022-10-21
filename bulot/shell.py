@@ -107,6 +107,7 @@ class Shell:
         log_silent(f"❯ {cmd}")
 
         if self.fake or fake:
+            print(f"fake ❯ {cmd}")
             command.return_code = 0
             command.end = command.start
             return command
@@ -128,6 +129,7 @@ class Shell:
             result = completed_process
         except sp.CalledProcessError as exc:
             result = exc
+            log.error(f"Command failed: {result.stderr}")
             raise exc
         finally:
             if result is not None:
@@ -136,7 +138,6 @@ class Shell:
                 command.end = time.time()
 
                 log_silent(command.stdout)
-                log.error(command.stderr)
                 callback(command=command)
         return command
 
@@ -144,26 +145,27 @@ class Shell:
         return self.run(*args, **kwargs)
 
     def __or__(self, cmd: RunPipeCmd) -> "Pipe":
-        stdout = self.run_pipe(cmd)
-        return Pipe(sh=self, stdout=stdout)
+        result = self.run_pipe(cmd)
+        if isinstance(result, Command):
+            return Pipe(
+                sh=self,
+                stdout=result.stdout,
+                stderr=result.stderr,
+                return_code=result.return_code,
+            )
+        else:
+            return Pipe(sh=self, stdout=result)
 
     def __lshift__(self, stdin: Any) -> "Pipe":
         return Pipe(sh=self, stdout=stdin)
 
-    def run_pipe(self, cmd: RunPipeCmd, **kwargs) -> Any:
+    def run_pipe(self, cmd: RunPipeCmd, **kwargs) -> Any | Command:
         if isinstance(cmd, str):
             if isinstance(kwargs.get("input"), str):
                 kwargs["input"] = kwargs["input"].encode("utf-8")
-            stdout = self.run(
-                cmd, silent=self.silent_piping, check=True, **kwargs
-            ).stdout
+            return self.run(cmd, silent=self.silent_piping, check=True, **kwargs)
         elif callable(cmd):
             stdin = kwargs.get("input")
-            if stdin is not None:
-                stdout = cmd(stdin)
-            else:
-                stdout = cmd()
+            return cmd() if stdin is None else cmd(stdin)
         else:
-            raise NotImplementedError("Shell does not support type {type(cmd)}.")
-
-        return stdout
+            raise NotImplementedError(f"Shell does not support type {type(cmd)}.")

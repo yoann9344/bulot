@@ -59,11 +59,11 @@ class XArgs(metaclass=XArgsMeta):
 
         execute = self.execute
         if isinstance(execute, NotSet):
-            stdout = [shell.run_pipe(cmd, input=stdin) for stdin in it]
+            stdout = [shell.run_pipe(cmd, input=stdin).stdout for stdin in it]
         else:
             if isinstance(execute, str):
                 execute = execute.format
-                stdout = [shell.run_pipe(execute(stdin)) for stdin in it]
+                stdout = [shell.run_pipe(execute(stdin)).stdout for stdin in it]
             else:
                 stdout = [execute(stdin) for stdin in it]
 

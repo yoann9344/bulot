@@ -23,14 +23,23 @@ class Command:
         if self.result is None:
             return ""
         else:
-            return self.result.stdout.decode("utf-8")
+            stdout = self.result.stdout.decode("utf-8")
+            return Command._remove_trailling_new_line(stdout)
 
     @property
     def stderr(self) -> str:
         if self.result is None:
             return ""
         else:
-            return self.result.stderr.decode("utf-8")
+            stderr = self.result.stderr.decode("utf-8")
+            return Command._remove_trailling_new_line(stderr)
+
+    @staticmethod
+    def _remove_trailling_new_line(value: str) -> str:
+        if value.endswith("\n"):
+            return value[:-1]
+        else:
+            return value
 
     def __gt__(self, file: FileType) -> Any:
         write_file(self.stdout, file, "w")
