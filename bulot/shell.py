@@ -122,20 +122,22 @@ class Shell:
         if config.get("shell", False):
             cmd_args = shlex.split(cmd) + list(args)
 
+        result: sp.CalledProcessError | sp.CompletedProcess | None = None
         try:
             completed_process: sp.CompletedProcess = sp.run(cmd_args, **config)
-            result: sp.CalledProcessError | sp.CompletedProcess = completed_process
+            result = completed_process
         except sp.CalledProcessError as exc:
             result = exc
             raise exc
         finally:
-            command.return_code = result.returncode
-            command.result = result
-            command.end = time.time()
+            if result is not None:
+                command.return_code = result.returncode
+                command.result = result
+                command.end = time.time()
 
-            log_silent(command.stdout)
-            log.error(command.stderr)
-            callback(command=command)
+                log_silent(command.stdout)
+                log.error(command.stderr)
+                callback(command=command)
         return command
 
     def __call__(self, *args, **kwargs):
