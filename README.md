@@ -9,11 +9,13 @@ Helper to run shell commands with python
 **Table of Contents**
 
 - [Installation](#installation)
+- [Introduction](#introduction)
 - [Examples](#examples)
     - [Concept](#concept)
     - [Print](#print)
     - [Classes](#classes)
     - [Git](#git)
+- [Development](#development)
 - [License](#license)
 
 ## Installation
@@ -21,6 +23,14 @@ Helper to run shell commands with python
 ```console
 pip install bulot
 ```
+
+## Introduction
+Shells like Bash or Zsh are powerfull and essential languages. But once, you need to create
+huge script it quickly become [unmaintainable](https://github.com/ninjaaron/replacing-bash-scripting-with-python#warning-signs).
+The best to create a complexe is so to use a more advanced language like Python, Perl, ...
+
+This library is still in early development, and might change.
+
 
 ## Examples
 
@@ -151,6 +161,21 @@ assert "git branch --show-current" in git_commands
 # print([command.stdout for command in git.historic])
 assert git.historic[0].stdout == branch_init
 assert any(command.fake for command in git.historic)
+```
+
+## Development
+```console
+# Linter
+hatch run lint
+# Type checking
+hatch run typecheck
+# Fixer
+hatch run fixer
+# Tests
+hatch run +py=310 test:pytest  # Only for python 3.10
+hatch run test:pytest  # Test all supported versions
+# Coverage
+hatch run cov
 ```
 
 ## License
