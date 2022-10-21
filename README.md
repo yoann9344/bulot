@@ -1,5 +1,5 @@
 # Bulot
-Helper to run Bash commands with python
+Helper to run shell commands with python
 
 [![PyPI - Version](https://img.shields.io/pypi/v/bulot.svg)](https://pypi.org/project/bulot)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/bulot.svg)](https://pypi.org/project/bulot)
@@ -81,8 +81,8 @@ def extract_classes(stdin: str) -> list:
 classes = sh << glob("bulot/*.py") | xargs - "cat {}" | "\n".join | extract_classes
 assert "Shell" in classes.stdout
 ```
-`sh | "ls *.py"` can't expand * because subprocess.run has shell=False then we must use glob
-see https://docs.python.org/3/library/subprocess.html#security-considerations
+`sh | "ls *.py"` can't expand `*` because subprocess.run has shell=False then we must use glob.  
+See https://docs.python.org/3/library/subprocess.html#security-considerations
 
 ### Git
 ```python
@@ -120,11 +120,11 @@ if checkout.return_code == 128:
     git | f"checkout {BRANCH_NAME}"
 
 # Modify
-sh.fake = True
+sh.fake = True  # Following sh's commands won't run
 FILE = "bulot/__init__.py"
 sh << "\nraise RuntimeError('Oups')" >> FILE
 sh.fake = False
-git.fake = True
+git.fake = True  # Following git's commands won't run
 git | f"add {FILE}"
 git | "commit -m 'Add error'"
 git.fake = False
@@ -146,7 +146,7 @@ if is_stashed:
 # Historic
 git_commands = [command.value for command in git.historic]
 assert "git branch --show-current" in git_commands
-print(git_commands)
+# print(git_commands)
 # to print all stdout
 # print([command.stdout for command in git.historic])
 assert git.historic[0].stdout == branch_init
