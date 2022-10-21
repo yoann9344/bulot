@@ -6,11 +6,16 @@ from pathlib import Path
 from ._types import FileData, FileType
 
 
-def write_file(data: FileData, file: FileType, mode: str):
+def write_file(data: FileData, file: FileType, mode: str, fake=False):
     if isinstance(file, str):
         file = Path(file)
 
-    if isinstance(file, Path):
+    if fake:
+        if "w" in mode:
+            print(f"fake ❯ write in '{file}'")
+        else:
+            print(f"fake ❯ append to '{file}'")
+    elif isinstance(file, Path):
         if not file.parent.exists():
             raise ValueError(f"Can't find the directory '{file.parent}'")
 

@@ -52,9 +52,9 @@ class Pipe:
         return Pipe(sh=self.sh, stdout=stdout)
 
     def __gt__(self, file: FileType) -> Any:
-        write_file(self.stdout, file, "w")
+        write_file(self.stdout, file, "w", fake=self.sh.fake)
         return self.stdout
 
     def __rshift__(self, file: FileType) -> Any:
-        write_file(self.stdout, file, "a+")
+        write_file(self.stdout, file, "a+", fake=self.sh.fake)
         return self.stdout

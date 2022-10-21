@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 class PipeExtractor:
     attr: str
 
-    def __call__(self, pipe: Pipe) -> Any:
+    def __call__(self, pipe: "Pipe") -> Any:
         return getattr(pipe, self.attr)
 
 

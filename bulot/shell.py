@@ -110,6 +110,7 @@ class Shell:
             print(f"fake ❯ {cmd}")
             command.return_code = 0
             command.end = command.start
+            command.fake = True
             return command
 
         if PY >= "3.9":

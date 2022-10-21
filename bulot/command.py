@@ -17,6 +17,7 @@ class Command:
     end: float
     return_code: int
     result: None | sp.CalledProcessError | sp.CompletedProcess
+    fake: bool = False
 
     @property
     def stdout(self) -> str:
@@ -42,9 +43,9 @@ class Command:
             return value
 
     def __gt__(self, file: FileType) -> Any:
-        write_file(self.stdout, file, "w")
+        write_file(self.stdout, file, "w", self.fake)
         return self.stdout
 
     def __rshift__(self, file: FileType) -> Any:
-        write_file(self.stdout, file, "a+")
+        write_file(self.stdout, file, "a+", self.fake)
         return self.stdout
