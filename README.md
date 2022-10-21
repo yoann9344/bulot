@@ -149,6 +149,8 @@ assert "git branch --show-current" in git_commands
 print(git_commands)
 # to print all stdout
 # print([command.stdout for command in git.historic])
+assert git.historic[0].stdout == branch_init
+assert any(command.fake for command in git.historic)
 ```
 
 ## License
