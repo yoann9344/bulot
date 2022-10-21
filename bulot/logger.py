@@ -11,6 +11,7 @@ logging.basicConfig(
     handlers=[RichHandler(rich_tracebacks=True, tracebacks_show_locals=True)],
 )
 log = logging.getLogger("bulot")
+log.setLevel(logging.INFO)
 
 
 if __name__ == "__main__":
