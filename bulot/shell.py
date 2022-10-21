@@ -66,7 +66,7 @@ def do_nothing(*args, **kwargs):
 
 @dataclass
 class Shell:
-    _cwd: Path = Path(__file__).parent
+    _cwd: Path = Path(__name__).parent
     fake: bool = False
     config: RunConfig = RunConfig.default()
     historic: list[Command] = data_field(default_factory=list)

@@ -15,7 +15,7 @@ class TestCommand:
         command = self.command
         assert isinstance(command, Command)
         assert command.value == ECHO_CMD
-        assert command.cwd == Path(__file__).parent.parent / "bulot"
+        assert command.cwd == Path(".")
         assert command.start < command.end
         assert command.return_code == 0
 
