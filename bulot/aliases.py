@@ -17,7 +17,7 @@ class Aliases(UserDict):
 
     @staticmethod
     def compile(alias):
-        return re.compile(r"\b" + alias + r"\b")
+        return re.compile(r"^\b" + alias + r"\b")
 
     def process_aliases(self, cmd: str):
         for (regex, replacement) in self.regexes.values():
