@@ -68,10 +68,10 @@ def do_nothing(*args, **kwargs):
 class Shell:
     _cwd: Path = Path(__name__).parent
     fake: bool = False
-    config: RunConfig = RunConfig.default()
+    config: RunConfig = data_field(default_factory=RunConfig.default)
     historic: list[Command] = data_field(default_factory=list)
     silent_piping: bool = True
-    aliases = Aliases.default()
+    aliases: Aliases = data_field(default_factory=Aliases.default)
 
     def __post_init__(self, *args, **kwargs):
         self.config.cwd = str(self._cwd)

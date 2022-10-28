@@ -1,3 +1,0 @@
-from ._types import FileData as FileData, FileType as FileType
-
-def write_file(data: FileData, file: FileType, mode: str, fake: bool = ...): ...
